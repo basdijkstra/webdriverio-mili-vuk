@@ -1,49 +1,39 @@
+import * as wdio from '../utils/wrapper_methods.js'
+
 describe('The NewZoo platform', () => {
 
     it('should allow me to switch between months and see relevant statistics change', async () => {
 
-        await browser.url('https://platform-staging.newzoo.com/');
+        await wdio.openBrowserAt('https://platform-staging.newzoo.com/');
 
-        await browser.maximizeWindow();
+        await wdio.setValue('input[name="user_name"]', 'testingscenariodevs@gmail.com');
 
-        await $('input[name="user_name"]').setValue('testingscenariodevs@gmail.com');
-        await $('input[name="password"]').setValue('asd');
+        await wdio.setValue('input[name="password"]', 'asd');
 
-        await $('button[type="submit"]').scrollIntoView();
-        await $('button[type="submit"]').click();
+        await wdio.click('button[type="submit"]');
 
-        await expect($('.big-header__text')).toBeExisting();
-        await expect($('.big-header__text')).toHaveTextContaining(
-            'Discover games and markets within the Newzoo Platform.');
+        await wdio.waitUntilContainsText('.big-header__text', 'Discover games and markets within the Newzoo Platform.');
 
-        await $('.main-nav__access').moveTo();
+        await wdio.hoverMouseOver('.main-nav__access');
 
-        await $('a[href="/high-level-rankings"]').click();
+        await wdio.click('a[href="/high-level-rankings"]');
 
-        await $('.about-the-data').moveTo();
+        await wdio.hoverMouseOver('.about-the-data');
 
-        await $("//table[@id='current-table']/tbody/tr[1]/td[6]/span").scrollIntoView();
-        let current_share = await $("//table[@id='current-table']/tbody/tr[1]/td[6]/span").getText();
+        let current_share = await wdio.getElementText("//table[@id='current-table']/tbody/tr[1]/td[6]/span");
 
-        await $('.dashboard-title__action').scrollIntoView();
-        await $('.dashboard-title__action').click();
+        await wdio.click('.dashboard-title__action');
 
-        await $('input[placeholder=\'MMMM dd, yyyy\']').scrollIntoView();
-        await $('input[placeholder=\'MMMM dd, yyyy\']').click();
+        await wdio.click('input[placeholder=\'MMMM dd, yyyy\']');
 
-        await $('.react-datepicker__navigation--previous').scrollIntoView();
-        await $('.react-datepicker__navigation--previous').click();
+        await wdio.click('.react-datepicker__navigation--previous');
 
-        await $('.react-datepicker__month-11').scrollIntoView();
-        await $('.react-datepicker__month-11').click();
+        await wdio.click('.react-datepicker__month-11');
 
-        await $("//div[text()='Fetch Data']").scrollIntoView();
-        await $("//div[text()='Fetch Data']").click();
+        await wdio.click("//div[text()='Fetch Data']");
 
-        await $("//table[@id='current-table']/tbody/tr[1]/td[6]/span").scrollIntoView();
-        let updated_share = await $("//table[@id='current-table']/tbody/tr[1]/td[6]/span").getText();
+        let updated_share = await wdio.getElementText("//table[@id='current-table']/tbody/tr[1]/td[6]/span");
 
         expect(updated_share).not.toBe(current_share);
     });
-
 });
